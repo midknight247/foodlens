@@ -50,7 +50,7 @@ const handleCompleteAnalysis = ({ product, imagePreview }) => {
       JSON.stringify(updatedScans)
     );
   } catch (error) {
-    console.error('[FoodLens] Could not save recent scan:', error);
+    console.error('[Labelicious] Could not save recent scan:', error);
   }
 
   setCurrentProduct(product);

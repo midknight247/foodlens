@@ -23,7 +23,7 @@ export async function analyzeLabelWithGemini({
         Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': 'http://localhost:5173',
-        'X-Title': 'FoodLens'
+        'X-Title': 'Labelicious'
       },
       body: JSON.stringify({
         model,
@@ -57,7 +57,7 @@ export async function analyzeLabelWithGemini({
         max_tokens: 8000,
 
         // Dots can spend output tokens on reasoning.
-        // FoodLens only needs the structured JSON.
+        // Labelicious only needs the structured JSON.
         reasoning: {
           effort: 'low',
           exclude: true
@@ -70,7 +70,7 @@ export async function analyzeLabelWithGemini({
 
   if (!response.ok) {
     console.error(
-      '[FoodLens] OpenRouter HTTP error:',
+      '[Labelicious] OpenRouter HTTP error:',
       response.status,
       responseText
     );
@@ -86,7 +86,7 @@ export async function analyzeLabelWithGemini({
     result = JSON.parse(responseText);
   } catch {
     console.error(
-      '[FoodLens] Invalid OpenRouter response:',
+      '[Labelicious] Invalid OpenRouter response:',
       responseText
     );
 
@@ -98,7 +98,7 @@ export async function analyzeLabelWithGemini({
   const choice = result?.choices?.[0];
 
   console.log(
-    '[FoodLens] OpenRouter choice:',
+    '[Labelicious] OpenRouter choice:',
     JSON.stringify(choice, null, 2)
   );
 
@@ -133,7 +133,7 @@ export async function analyzeLabelWithGemini({
     );
   }
 
-  console.log('[FoodLens] Raw AI JSON:');
+  console.log('[Labelicious] Raw AI JSON:');
   console.log(content);
 
   let cleaned = content.trim();
@@ -158,12 +158,12 @@ export async function analyzeLabelWithGemini({
       'unknown';
 
     console.error(
-      '[FoodLens] AI returned invalid JSON. Finish reason:',
+      '[Labelicious] AI returned invalid JSON. Finish reason:',
       finishReason
     );
 
     console.error(
-      '[FoodLens] AI returned invalid JSON:',
+      '[Labelicious] AI returned invalid JSON:',
       cleaned
     );
 

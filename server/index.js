@@ -61,5 +61,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`FoodLens backend API server listening on http://localhost:${PORT}`);
+  console.log(`Labelicious backend API server listening on http://localhost:${PORT}`);
 });

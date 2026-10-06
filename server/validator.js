@@ -1,10 +1,10 @@
 /**
- * Server-side validation and sanitization for FoodLens AI food-label extraction.
+ * Server-side validation and sanitization for Labelicious AI food-label extraction.
  *
  * Important:
  * Missing/unreadable nutrition values remain null.
  * We NEVER convert missing data into 0 because that would create false
- * nutritional information and distort the FoodLens score.
+ * nutritional information and distort the Labelicious score.
  */
 
 export function validateAndSanitizeAiResponse(rawJson) {
@@ -56,34 +56,49 @@ export function validateAndSanitizeAiResponse(rawJson) {
   // IMPORTANT: missing values stay null instead of becoming zero.
   const rawNut = rawJson.nutrition || {};
 
-  const nutrition = {
-    calories: parseNumeric(rawNut.calories) ?? product.energyKcal,
+const nutritionBasis =
+  rawNut.basis === 'perServing' ||
+  rawNut.basis === 'per100g'
+    ? rawNut.basis
+    : 'unknown';
 
-    protein: parseNumeric(rawNut.protein),
+const nutrition = {
+  // Preserve whether the extracted values are per serving
+  // or per 100g. Labelicious will use this later for normalization.
+  basis: nutritionBasis,
 
-    carbohydrates:
-      parseNumeric(rawNut.carbohydrates) ??
-      parseNumeric(rawNut.carbs),
+  calories:
+    parseNumeric(rawNut.calories) ??
+    product.energyKcal,
 
-    totalFat:
-      parseNumeric(rawNut.totalFat) ??
-      parseNumeric(rawNut.fat),
+  protein:
+    parseNumeric(rawNut.protein),
 
-    saturatedFat:
-      parseNumeric(rawNut.saturatedFat) ??
-      parseNumeric(rawNut.satFat),
+  carbohydrates:
+    parseNumeric(rawNut.carbohydrates) ??
+    parseNumeric(rawNut.carbs),
 
-    fiber: parseNumeric(rawNut.fiber),
+  totalFat:
+    parseNumeric(rawNut.totalFat) ??
+    parseNumeric(rawNut.fat),
 
-    totalSugar:
-      parseNumeric(rawNut.totalSugar) ??
-      parseNumeric(rawNut.sugar),
+  saturatedFat:
+    parseNumeric(rawNut.saturatedFat) ??
+    parseNumeric(rawNut.satFat),
 
-    addedSugar: parseNumeric(rawNut.addedSugar),
+  fiber:
+    parseNumeric(rawNut.fiber),
 
-    sodium: parseNumeric(rawNut.sodium)
-  };
+  totalSugar:
+    parseNumeric(rawNut.totalSugar) ??
+    parseNumeric(rawNut.sugar),
 
+  addedSugar:
+    parseNumeric(rawNut.addedSugar),
+
+  sodium:
+    parseNumeric(rawNut.sodium)
+};
   // Ingredients
   const rawIngredients = Array.isArray(rawJson.ingredients)
     ? rawJson.ingredients

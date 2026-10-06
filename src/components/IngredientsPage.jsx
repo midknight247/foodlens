@@ -1,23 +1,21 @@
 import React, { useState } from 'react';
-import { 
-  ArrowLeft, 
-  ChevronDown, 
-  ChevronUp, 
-  Sparkles, 
-  Info, 
-  CheckCircle2, 
-  AlertCircle, 
-  SlidersHorizontal, 
-  ArrowRight,
+import {
+  ArrowLeft,
+  ChevronDown,
+  ChevronUp,
+  Sparkles,
+  Info,
+  CheckCircle2,
   ShieldCheck,
   Tag,
-  HelpCircle
+  HelpCircle,
+  ArrowRight
 } from 'lucide-react';
 
-export default function IngredientsPage({ 
-  product, 
-  onBackToAnalysis, 
-  onNavigateToPersonalize 
+export default function IngredientsPage({
+  product,
+  onBackToAnalysis,
+  onNavigateToPersonalize
 }) {
   const [expandedId, setExpandedId] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -25,6 +23,7 @@ export default function IngredientsPage({
   if (!product) return null;
 
   const ingredients = product.ingredients || [];
+
   const summary = product.ingredientSummary || {
     totalCount: ingredients.length,
     additivesCount: 0,
@@ -33,343 +32,791 @@ export default function IngredientsPage({
   };
 
   const toggleExpand = (id) => {
-    setExpandedId(prev => prev === id ? null : id);
+    setExpandedId((prev) => (prev === id ? null : id));
   };
 
-  // Get unique categories for optional filtering
-  const categories = ['all', ...Array.from(new Set(ingredients.map(ing => ing.category)))];
+  const categories = [
+    'all',
+    ...Array.from(
+      new Set(
+        ingredients
+          .map((ing) => ing.category)
+          .filter(Boolean)
+      )
+    )
+  ];
 
-  const filteredIngredients = selectedCategory === 'all' 
-    ? ingredients 
-    : ingredients.filter(ing => ing.category === selectedCategory);
+  const filteredIngredients =
+    selectedCategory === 'all'
+      ? ingredients
+      : ingredients.filter(
+          (ing) => ing.category === selectedCategory
+        );
 
-  // Category badge styles
-  const getCategoryBadge = (category) => {
+  const getCategoryStyle = (category) => {
     switch (category) {
       case 'Sweetener':
-        return 'bg-amber-50 text-amber-800 border-amber-200';
+        return 'bg-[#ff6b2c] text-[#26113f] border-[#26113f]';
+
       case 'Emulsifier':
-        return 'bg-purple-50 text-purple-800 border-purple-200';
+        return 'bg-[#c8f31d] text-[#26113f] border-[#26113f]';
+
       case 'Flavour enhancer':
-        return 'bg-blue-50 text-blue-800 border-blue-200';
+        return 'bg-[#26113f] text-[#fff8e9] border-[#26113f]';
+
       case 'Acidity regulator':
-        return 'bg-indigo-50 text-indigo-800 border-indigo-200';
+        return 'bg-[#fff8e9] text-[#26113f] border-[#26113f]';
+
       case 'Preservative':
-        return 'bg-rose-50 text-rose-800 border-rose-200';
+        return 'bg-[#ff6b2c]/20 text-[#26113f] border-[#ff6b2c]';
+
       case 'Thickener':
       case 'Colour':
-        return 'bg-orange-50 text-orange-800 border-orange-200';
-      case 'Ingredient':
+        return 'bg-[#c8f31d]/50 text-[#26113f] border-[#26113f]';
+
       default:
-        return 'bg-slate-100 text-slate-700 border-slate-200';
+        return 'bg-[#f2eadb] text-[#26113f] border-[#ded5c5]';
     }
   };
 
-  // Status indicator styles (neutral, educational)
-  const getStatusBadge = (status) => {
+  const getStatusStyle = (status) => {
     switch (status) {
       case 'Whole food':
         return {
-          badge: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-          dot: 'bg-emerald-500'
+          wrapper:
+            'bg-[#c8f31d]/50 text-[#26113f] border-[#26113f]',
+          dot: 'bg-[#26113f]'
         };
+
       case 'Worth checking':
       case 'Worth understanding':
         return {
-          badge: 'bg-amber-50 text-amber-800 border-amber-200',
-          dot: 'bg-amber-500'
+          wrapper:
+            'bg-[#ff6b2c]/15 text-[#8d3212] border-[#ff6b2c]',
+          dot: 'bg-[#ff6b2c]'
         };
-      case 'Commonly used':
+
       default:
         return {
-          badge: 'bg-slate-50 text-slate-700 border-slate-200',
-          dot: 'bg-slate-400'
+          wrapper:
+            'bg-[#f2eadb] text-[#756d7d] border-[#ded5c5]',
+          dot: 'bg-[#756d7d]'
         };
     }
   };
 
   return (
-    <div className="min-h-[85vh] py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-      
-      {/* 1. Header with Back Button */}
-      <div className="mb-8">
-        <button
-          type="button"
-          onClick={onBackToAnalysis}
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors py-1.5 pr-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>← Back to Analysis</span>
-        </button>
+    <div className="min-h-[85vh] py-8 sm:py-12 px-4 sm:px-6 lg:px-8 bg-[#fff8e9]">
+      <div className="max-w-4xl mx-auto">
 
-        <div className="mt-4">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-xs font-semibold uppercase tracking-wider mb-2">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Ingredient Intelligence</span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            What's inside?
-          </h1>
-          <p className="mt-2 text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed">
-            FoodLens translates complicated ingredient names into plain English.
-          </p>
-          <p className="mt-2 text-sm font-semibold text-slate-700">
-            Product: <span className="text-emerald-700">{product.name}</span> ({product.brand})
-          </p>
-        </div>
-      </div>
-
-      {/* 2. INGREDIENT SUMMARY CARD */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm mb-8">
-        <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
-          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-            <Info className="w-4 h-4 text-emerald-600" />
-            <span>Label Composition Overview</span>
-          </h2>
-          <span className="text-xs text-slate-400">
-            {summary.summaryText}
-          </span>
-        </div>
-
-        {/* 3 Metrics: Number of ingredients, additives identified, things to understand */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Total Ingredients
-            </span>
-            <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">
-              {summary.totalCount} <span className="text-sm font-normal text-slate-500">ingredients</span>
-            </div>
-            <p className="text-[11px] text-slate-500 mt-1">
-              From printed package label
-            </p>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Functional Additives
-            </span>
-            <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">
-              {summary.additivesCount} <span className="text-sm font-normal text-slate-500">identified</span>
-            </div>
-            <p className="text-[11px] text-slate-500 mt-1">
-              Emulsifiers, regulators, or enhancers
-            </p>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-amber-50/50 border border-amber-100">
-            <span className="text-xs font-semibold uppercase tracking-wider text-amber-800">
-              Things to Understand
-            </span>
-            <div className="text-2xl sm:text-3xl font-extrabold text-amber-900 mt-1">
-              {summary.attentionCount} <span className="text-sm font-normal text-amber-700">worth checking</span>
-            </div>
-            <p className="text-[11px] text-amber-700/80 mt-1">
-              Allergens, sugars, or refined fats
-            </p>
-          </div>
-
-        </div>
-      </div>
-
-      {/* Category Filter Pills (Smart Categories) */}
-      <div className="mb-6 flex flex-wrap items-center gap-2">
-        <span className="text-xs font-semibold text-slate-500 mr-1 flex items-center gap-1">
-          <Tag className="w-3.5 h-3.5" />
-          <span>Category:</span>
-        </span>
-        {categories.map((cat) => (
+        {/* HEADER */}
+        <div className="mb-10">
           <button
-            key={cat}
             type="button"
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-medium capitalize transition-all ${
-              selectedCategory === cat
-                ? 'bg-slate-900 text-white font-semibold shadow-xs'
-                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
+            onClick={onBackToAnalysis}
+            className="
+              inline-flex items-center gap-2
+              text-sm font-black
+              text-[#26113f]/65
+              hover:text-[#26113f]
+              transition-colors
+              mb-7
+            "
           >
-            {cat === 'all' ? `All (${ingredients.length})` : cat}
+            <ArrowLeft className="w-4 h-4" />
+            Back to Analysis
           </button>
-        ))}
-      </div>
 
-      {/* 3 & 5. EXPANDABLE INGREDIENT LIST */}
-      <div className="space-y-3 mb-10">
-        {filteredIngredients.map((item) => {
-          const isExpanded = expandedId === item.id;
-          const statusStyle = getStatusBadge(item.status);
-
-          return (
-            <div
-              key={item.id}
-              className={`bg-white rounded-2xl border transition-all duration-200 overflow-hidden ${
-                isExpanded 
-                  ? 'border-emerald-300 shadow-md ring-1 ring-emerald-200/60' 
-                  : 'border-slate-200 hover:border-slate-300 shadow-xs'
-              }`}
+          <div className="flex items-center gap-3 mb-5">
+            <span
+              className="
+                inline-flex items-center gap-2
+                px-3 py-1.5
+                bg-[#c8f31d]
+                text-[#26113f]
+                border-2 border-[#26113f]
+                text-[10px] font-black
+                uppercase tracking-[0.16em]
+              "
             >
-              {/* Collapsed Bar / Trigger */}
-              <button
-                type="button"
-                onClick={() => toggleExpand(item.id)}
-                className="w-full p-4 sm:p-5 text-left flex items-start sm:items-center justify-between gap-4 focus:outline-none focus:bg-slate-50/50"
-                aria-expanded={isExpanded}
+              <Sparkles className="w-3.5 h-3.5" />
+              Ingredient Intelligence
+            </span>
+
+            <span className="hidden sm:block h-0.5 flex-1 bg-[#ff6b2c]" />
+          </div>
+
+          <h1
+            className="
+              text-4xl sm:text-5xl lg:text-6xl
+              font-black
+              tracking-[-0.04em]
+              leading-[0.95]
+              text-[#26113f]
+            "
+          >
+            What's
+            <br />
+            <span className="text-[#ff6b2c]">inside?</span>
+          </h1>
+
+          <p
+            className="
+              mt-6
+              text-base sm:text-lg
+              text-[#756d7d]
+              max-w-2xl
+              leading-7
+              tracking-[0.012em]
+            "
+          >
+            Labelicious translates complicated ingredient names
+            into plain English, so you can understand what
+            you're actually looking at.
+          </p>
+
+          <div
+            className="
+              mt-5
+              flex flex-wrap items-center gap-x-2 gap-y-1
+              text-sm font-bold
+              text-[#26113f]
+            "
+          >
+            <span>Product:</span>
+            <span className="text-[#ff6b2c]">
+              {product.name}
+            </span>
+            <span className="text-[#756d7d]">
+              ({product.brand})
+            </span>
+          </div>
+        </div>
+
+        {/* COMPOSITION OVERVIEW */}
+        <section
+          className="
+            bg-[#26113f]
+            text-[#fff8e9]
+            border-2 border-[#26113f]
+            shadow-[7px_7px_0_#ff6b2c]
+            p-6 sm:p-8
+            mb-10
+          "
+        >
+          <div
+            className="
+              flex flex-col sm:flex-row
+              sm:items-center sm:justify-between
+              gap-3
+              pb-5
+              mb-6
+              border-b-2 border-[#fff8e9]/15
+            "
+          >
+            <h2 className="text-base font-black flex items-center gap-2">
+              <Info className="w-4 h-4 text-[#c8f31d]" />
+              Label Composition Overview
+            </h2>
+
+            <span className="text-[11px] text-[#fff8e9]/45">
+              {summary.summaryText}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+            <div
+              className="
+                bg-[#fff8e9]
+                text-[#26113f]
+                border-2 border-[#fff8e9]
+                p-4
+              "
+            >
+              <span
+                className="
+                  text-[10px]
+                  font-black
+                  uppercase
+                  tracking-[0.15em]
+                  text-[#756d7d]
+                "
               >
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                    {/* Ingredient Name */}
-                    <span className="text-base font-bold text-slate-900">
-                      {item.name}
-                    </span>
+                Total Ingredients
+              </span>
 
-                    {/* Optional INS / E-number code */}
-                    {item.code && (
-                      <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                        {item.code}
-                      </span>
-                    )}
+              <div className="text-3xl font-black mt-2">
+                {summary.totalCount}
+              </div>
 
-                    {/* Category Badge */}
-                    <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${getCategoryBadge(item.category)}`}>
-                      {item.category}
-                    </span>
+              <p className="text-[11px] text-[#756d7d] mt-1">
+                From printed package label
+              </p>
+            </div>
 
-                    {/* Status Indicator */}
-                    <span className={`inline-flex items-center gap-1.5 text-[10px] font-medium px-2 py-0.5 rounded-full border ${statusStyle.badge}`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${statusStyle.dot}`} />
-                      <span>{item.status}</span>
-                    </span>
-                  </div>
+            <div
+              className="
+                bg-[#c8f31d]
+                text-[#26113f]
+                border-2 border-[#26113f]
+                p-4
+              "
+            >
+              <span
+                className="
+                  text-[10px]
+                  font-black
+                  uppercase
+                  tracking-[0.15em]
+                "
+              >
+                Functional Additives
+              </span>
 
-                  {/* Short plain English explanation (Visible in collapsed state) */}
-                  <p className="text-xs sm:text-sm text-slate-600 line-clamp-1 sm:line-clamp-none">
-                    {item.explanation}
-                  </p>
-                </div>
+              <div className="text-3xl font-black mt-2">
+                {summary.additivesCount}
+              </div>
 
-                {/* Expand / Collapse Icon */}
-                <div className="shrink-0 text-slate-400 p-1">
-                  {isExpanded ? (
-                    <ChevronUp className="w-5 h-5 text-emerald-600" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5" />
-                  )}
-                </div>
+              <p className="text-[11px] text-[#26113f]/65 mt-1">
+                Emulsifiers, regulators, enhancers
+              </p>
+            </div>
+
+            <div
+              className="
+                bg-[#ff6b2c]
+                text-[#26113f]
+                border-2 border-[#26113f]
+                p-4
+              "
+            >
+              <span
+                className="
+                  text-[10px]
+                  font-black
+                  uppercase
+                  tracking-[0.15em]
+                "
+              >
+                Things to Understand
+              </span>
+
+              <div className="text-3xl font-black mt-2">
+                {summary.attentionCount}
+              </div>
+
+              <p className="text-[11px] text-[#26113f]/70 mt-1">
+                Worth looking at more closely
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+        {/* CATEGORY FILTER */}
+        <div className="mb-7">
+          <div className="flex items-center gap-2 mb-3">
+            <Tag className="w-4 h-4 text-[#ff6b2c]" />
+
+            <span
+              className="
+                text-[10px]
+                font-black
+                uppercase
+                tracking-[0.16em]
+                text-[#26113f]
+              "
+            >
+              Filter ingredients
+            </span>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setSelectedCategory(cat)}
+                className={`
+                  px-3.5 py-2
+                  border-2
+                  text-[11px]
+                  font-black
+                  uppercase
+                  tracking-[0.04em]
+                  transition-all
+                  ${
+                    selectedCategory === cat
+                      ? 'bg-[#26113f] text-[#c8f31d] border-[#26113f] shadow-[3px_3px_0_#ff6b2c]'
+                      : 'bg-[#fff8e9] text-[#26113f]/65 border-[#ded5c5] hover:border-[#26113f] hover:text-[#26113f]'
+                  }
+                `}
+              >
+                {cat === 'all'
+                  ? `All (${ingredients.length})`
+                  : cat}
               </button>
+            ))}
+          </div>
+        </div>
 
-              {/* 5. Expanded Details Pane */}
-              {isExpanded && (
-                <div className="px-4 sm:px-5 pb-5 pt-2 border-t border-slate-100 bg-[#FAFCFB] space-y-4 animate-in fade-in duration-200">
-                  
-                  {/* Detailed explanation */}
-                  <div>
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">
-                      What it is
-                    </h4>
-                    <p className="text-sm text-slate-700 leading-relaxed">
+        {/* INGREDIENT LIST */}
+        <div className="space-y-4 mb-12">
+          {filteredIngredients.map((item) => {
+            const isExpanded = expandedId === item.id;
+            const statusStyle = getStatusStyle(item.status);
+
+            return (
+              <div
+                key={item.id}
+                className={`
+                  overflow-hidden
+                  border-2
+                  transition-all duration-200
+                  ${
+                    isExpanded
+                      ? 'border-[#26113f] shadow-[5px_5px_0_#c8f31d]'
+                      : 'border-[#ded5c5] hover:border-[#26113f]'
+                  }
+                  bg-[#fff8e9]
+                `}
+              >
+                {/* INGREDIENT HEADER */}
+                <button
+                  type="button"
+                  onClick={() => toggleExpand(item.id)}
+                  className="
+                    w-full
+                    p-4 sm:p-5
+                    text-left
+                    flex items-start sm:items-center
+                    justify-between
+                    gap-4
+                    hover:bg-[#f8efdf]
+                    transition-colors
+                  "
+                  aria-expanded={isExpanded}
+                >
+                  <div className="flex-1 min-w-0">
+
+                    <div
+                      className="
+                        flex flex-wrap
+                        items-center
+                        gap-2
+                        mb-2
+                      "
+                    >
+                      <span
+                        className="
+                          text-base
+                          sm:text-lg
+                          font-black
+                          text-[#26113f]
+                          tracking-[-0.015em]
+                        "
+                      >
+                        {item.name}
+                      </span>
+
+                      {item.code && (
+                        <span
+                          className="
+                            text-[10px]
+                            font-mono
+                            font-black
+                            px-2 py-1
+                            bg-[#26113f]
+                            text-[#c8f31d]
+                            border border-[#26113f]
+                          "
+                        >
+                          {item.code}
+                        </span>
+                      )}
+
+                      <span
+                        className={`
+                          text-[10px]
+                          font-black
+                          uppercase
+                          tracking-[0.04em]
+                          px-2 py-1
+                          border
+                          ${getCategoryStyle(item.category)}
+                        `}
+                      >
+                        {item.category}
+                      </span>
+
+                      <span
+                        className={`
+                          inline-flex
+                          items-center
+                          gap-1.5
+                          text-[10px]
+                          font-bold
+                          px-2 py-1
+                          border
+                          ${statusStyle.wrapper}
+                        `}
+                      >
+                        <span
+                          className={`
+                            w-1.5 h-1.5
+                            ${statusStyle.dot}
+                          `}
+                        />
+
+                        {item.status}
+                      </span>
+                    </div>
+
+                    <p
+                      className="
+                        text-xs sm:text-sm
+                        text-[#756d7d]
+                        leading-6
+                        tracking-[0.012em]
+                      "
+                    >
                       {item.explanation}
                     </p>
                   </div>
 
-                  {/* Why it is used (purpose) */}
-                  <div className="p-3.5 rounded-xl bg-white border border-slate-200/80">
-                    <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5 mb-1">
-                      <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>Why is it used in this food?</span>
-                    </h4>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                      {item.purpose}
-                    </p>
+                  <div
+                    className="
+                      shrink-0
+                      w-9 h-9
+                      border-2 border-[#ded5c5]
+                      flex items-center justify-center
+                      text-[#26113f]
+                    "
+                  >
+                    {isExpanded ? (
+                      <ChevronUp className="w-4 h-4" />
+                    ) : (
+                      <ChevronDown className="w-4 h-4" />
+                    )}
                   </div>
+                </button>
 
-                  {/* FoodLens Responsible Note */}
-                  <div className="p-3.5 rounded-xl bg-emerald-50/40 border border-emerald-100/80">
-                    <h4 className="text-xs font-bold text-emerald-900 flex items-center gap-1.5 mb-1">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>FoodLens Note</span>
-                    </h4>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      {item.note || "Presence alone does not determine whether a product is healthy or unhealthy. Consider the ingredient alongside the product's overall nutrition profile."}
-                    </p>
+                {/* EXPANDED DETAILS */}
+                {isExpanded && (
+                  <div
+                    className="
+                      px-4 sm:px-5
+                      pb-5
+                      pt-5
+                      border-t-2 border-[#ded5c5]
+                      bg-[#f8efdf]
+                      space-y-5
+                    "
+                  >
+                    <div>
+                      <h4
+                        className="
+                          text-[10px]
+                          font-black
+                          uppercase
+                          tracking-[0.16em]
+                          text-[#756d7d]
+                          mb-2
+                        "
+                      >
+                        What it is
+                      </h4>
+
+                      <p
+                        className="
+                          text-sm
+                          text-[#26113f]/80
+                          leading-6
+                          tracking-[0.012em]
+                        "
+                      >
+                        {item.explanation}
+                      </p>
+                    </div>
+
+                    <div
+                      className="
+                        p-4
+                        bg-[#fff8e9]
+                        border-2 border-[#ded5c5]
+                      "
+                    >
+                      <h4
+                        className="
+                          text-xs
+                          font-black
+                          text-[#26113f]
+                          flex items-center gap-2
+                          mb-2
+                        "
+                      >
+                        <HelpCircle className="w-4 h-4 text-[#ff6b2c]" />
+                        Why is it used in this food?
+                      </h4>
+
+                      <p
+                        className="
+                          text-xs sm:text-sm
+                          text-[#756d7d]
+                          leading-6
+                          tracking-[0.012em]
+                        "
+                      >
+                        {item.purpose}
+                      </p>
+                    </div>
+
+                    <div
+                      className="
+                        p-4
+                        bg-[#26113f]
+                        text-[#fff8e9]
+                        border-2 border-[#26113f]
+                      "
+                    >
+                      <h4
+                        className="
+                          text-xs
+                          font-black
+                          flex items-center gap-2
+                          mb-2
+                        "
+                      >
+                        <ShieldCheck className="w-4 h-4 text-[#c8f31d]" />
+                        Labelicious Note
+                      </h4>
+
+                      <p
+                        className="
+                          text-xs
+                          text-[#fff8e9]/70
+                          leading-6
+                          tracking-[0.012em]
+                        "
+                      >
+                        {item.note ||
+                          "Presence alone does not determine whether a product is healthy or unhealthy. Consider the ingredient alongside the product's overall nutrition profile."}
+                      </p>
+                    </div>
                   </div>
+                )}
+              </div>
+            );
+          })}
 
-                </div>
-              )}
+          {filteredIngredients.length === 0 && (
+            <div
+              className="
+                border-2 border-dashed
+                border-[#ded5c5]
+                p-10
+                text-center
+                text-sm
+                text-[#756d7d]
+              "
+            >
+              No ingredients found in this category.
             </div>
-          );
-        })}
-      </div>
+          )}
+        </div>
 
-      {/* 6. "WHAT SHOULD I PAY ATTENTION TO?" HIGHLIGHT SECTION */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm mb-10">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center border border-amber-200">
-            <Info className="w-4 h-4" />
+        {/* WHAT TO PAY ATTENTION TO */}
+        <section
+          className="
+            bg-[#fff8e9]
+            border-2 border-[#26113f]
+            p-6 sm:p-8
+            mb-12
+            shadow-[6px_6px_0_#c8f31d]
+          "
+        >
+          <div className="flex items-start gap-4 mb-6">
+            <div
+              className="
+                w-10 h-10
+                shrink-0
+                bg-[#ff6b2c]
+                border-2 border-[#26113f]
+                flex items-center justify-center
+              "
+            >
+              <Info className="w-5 h-5 text-[#26113f]" />
+            </div>
+
+            <div>
+              <h3
+                className="
+                  text-xl sm:text-2xl
+                  font-black
+                  text-[#26113f]
+                  tracking-[-0.02em]
+                "
+              >
+                What should I pay attention to?
+              </h3>
+
+              <p className="text-xs text-[#756d7d] mt-1.5 leading-5">
+                Balanced observations based on this ingredient list.
+              </p>
+            </div>
           </div>
+
+          <div className="space-y-3">
+            {(product.attentionPoints || [
+              'Consider the overall nutrient density alongside individual additives.',
+              'Added sugar and saturated fats represent key dietary metrics.',
+              'Review for personal sensitivities or acute allergen triggers.'
+            ]).map((point, idx) => (
+              <div
+                key={idx}
+                className="
+                  flex items-start gap-3
+                  p-4
+                  bg-[#f8efdf]
+                  border-2 border-[#ded5c5]
+                  text-xs sm:text-sm
+                  text-[#26113f]/80
+                  leading-6
+                  tracking-[0.012em]
+                "
+              >
+                <CheckCircle2
+                  className="
+                    w-4 h-4
+                    text-[#26113f]
+                    shrink-0
+                    mt-1
+                  "
+                />
+
+                <span>{point}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* PERSONALIZATION CTA */}
+        <section
+          className="
+            bg-[#26113f]
+            text-[#fff8e9]
+            border-2 border-[#26113f]
+            p-6 sm:p-8
+            shadow-[7px_7px_0_#ff6b2c]
+            flex flex-col sm:flex-row
+            items-start sm:items-center
+            justify-between
+            gap-7
+          "
+        >
           <div>
-            <h3 className="text-lg font-bold text-slate-900">
-              What should I pay attention to?
+            <div
+              className="
+                flex items-center gap-2
+                text-[10px]
+                font-black
+                text-[#c8f31d]
+                uppercase
+                tracking-[0.16em]
+                mb-3
+              "
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              Tailor to Your Goals
+            </div>
+
+            <h3
+              className="
+                text-2xl sm:text-3xl
+                font-black
+                tracking-[-0.025em]
+              "
+            >
+              See this food for you.
             </h3>
-            <p className="text-xs text-slate-500">
-              Balanced, objective observations based on this ingredient list
+
+            <p
+              className="
+                text-sm
+                text-[#fff8e9]/60
+                max-w-md
+                mt-2
+                leading-6
+                tracking-[0.012em]
+              "
+            >
+              Adjust the analysis based on your priorities,
+              such as fitness, children, or other dietary goals.
             </p>
           </div>
-        </div>
 
-        <div className="space-y-3">
-          {(product.attentionPoints || [
-            'Consider the overall nutrient density alongside individual additives.',
-            'Added sugar and saturated fats represent key dietary metrics.',
-            'Review for personal sensitivities or acute allergen triggers.'
-          ]).map((point, idx) => (
-            <div 
-              key={idx}
-              className="flex items-start gap-3 p-3.5 rounded-2xl bg-[#F8FAF9] border border-slate-200/80 text-xs sm:text-sm text-slate-700 leading-relaxed"
-            >
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              <span>{point}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+          <button
+            type="button"
+            onClick={onNavigateToPersonalize}
+            className="
+              group
+              shrink-0
+              inline-flex
+              items-center
+              gap-3
+              px-5 py-3.5
+              bg-[#c8f31d]
+              text-[#26113f]
+              border-2 border-[#190b2b]
+              font-black
+              text-sm
+              shadow-[4px_4px_0_#ff6b2c]
+              hover:translate-x-[2px]
+              hover:translate-y-[2px]
+              hover:shadow-[2px_2px_0_#ff6b2c]
+              transition-all
+            "
+          >
+            <span>Choose My Profile</span>
 
-      {/* 7. PERSONALIZATION PREVIEW CTA */}
-      <div className="bg-gradient-to-br from-emerald-600 via-teal-700 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-        <div className="space-y-1">
-          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-200 uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-300" />
-            <span>Tailor to Your Goals</span>
-          </div>
-          <h3 className="text-2xl font-extrabold tracking-tight">
-            See this food for me →
-          </h3>
-          <p className="text-sm text-emerald-100/90 max-w-md">
-            FoodLens can adjust the analysis based on your priorities (Child, Fitness, Heart Health, etc.).
-          </p>
-        </div>
+            <ArrowRight
+              className="
+                w-4 h-4
+                group-hover:translate-x-1
+                transition-transform
+              "
+            />
+          </button>
+        </section>
 
-        <button
-          type="button"
-          onClick={onNavigateToPersonalize}
-          className="shrink-0 inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white text-slate-900 hover:bg-emerald-50 font-bold text-sm shadow-sm transition-all active:scale-[0.98]"
+        {/* BOTTOM BACK BUTTON */}
+        <div
+          className="
+            mt-10
+            pt-5
+            border-t-2 border-[#ded5c5]
+            flex justify-center
+          "
         >
-          <span>Choose My Profile →</span>
-        </button>
-      </div>
+          <button
+            type="button"
+            onClick={onBackToAnalysis}
+            className="
+              text-xs
+              font-black
+              text-[#756d7d]
+              hover:text-[#26113f]
+              transition-colors
+              uppercase
+              tracking-[0.08em]
+            "
+          >
+            ← Return to Overall Product Analysis
+          </button>
+        </div>
 
-      {/* Bottom Back Button */}
-      <div className="mt-8 pt-4 border-t border-slate-200 flex justify-center">
-        <button
-          type="button"
-          onClick={onBackToAnalysis}
-          className="text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
-        >
-          ← Return to Overall Product Analysis
-        </button>
       </div>
-
     </div>
   );
 }

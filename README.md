@@ -1,4 +1,4 @@
-# FoodLens 🌿 — AI-Powered Food Label Analysis
+# Labelicious 🌿 — AI-Powered Food Label Analysis
 
 > **Understand your food. Make better choices.**  
 > AI-powered food label analysis that turns confusing nutrition information into simple, personalized decisions.
@@ -67,14 +67,14 @@ foodlens/
 ## ✨ Features Implemented
 
 ### Step 1: Foundation & Home Screen
-1. **FoodLens Brand & Logo**: Polished brand identity with clean typography and green health-tech accents.
+1. **Labelicious Brand & Logo**: Polished brand identity with clean typography and green health-tech accents.
 2. **Hero Section**:
    - Headline: *"Understand your food. Make better choices."*
    - Supporting text: *"AI-powered food label analysis that turns confusing nutrition information into simple, personalized decisions."*
    - Primary CTA: **"Scan Food Label"**
    - Secondary CTA: **"Enter Manually"**
    - Simulated label breakdown card showing live AI score (84/100).
-3. **How FoodLens Works**:
+3. **How Labelicious Works**:
    - 3 clear steps: **Scan**, **Understand**, and **Decide**.
 4. **Recent Analyses (Local Mock Data)**:
    - *Artisan Almond Crunch Granola* (Score: 84 / 100 - "Great Choice")
@@ -98,7 +98,7 @@ foodlens/
 3. **Smart Category Badging & Filtering**:
    - Visual badges for *Whole food*, *Sweetener*, *Emulsifier*, *Flavour enhancer*, *Acidity regulator*, etc.
 4. **Expandable / Collapsible Ingredient Cards**:
-   - Deep-dive chemical purpose and responsible FoodLens notes.
+   - Deep-dive chemical purpose and responsible Labelicious notes.
 5. **Personalization Preview (`PersonalizePage.jsx`)**:
    - 4 selectable profiles: **General**, **Child**, **Fitness**, and **Low Sodium**.
 
@@ -110,7 +110,7 @@ foodlens/
 3. **Side-by-Side Nutritional Breakdown**:
    - Highlights nutritional advantages across Calories, Protein, Carbs, Added Sugar, Total Fat, Sodium, and Fiber.
 4. **AI-Style Final Recommendation Card**:
-   - Generates an objective recommendation (*"Based on the information provided, FoodLens recommends..."*) with top 2–3 reasons.
+   - Generates an objective recommendation (*"Based on the information provided, Labelicious recommends..."*) with top 2–3 reasons.
 5. **"It Depends on You" Profile Integration**:
    - Explains how recommendations change when evaluating for Fitness, Children, or Low Sodium.
 6. **Product Swapping & Switching**:

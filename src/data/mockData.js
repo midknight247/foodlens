@@ -1,5 +1,5 @@
 /**
- * Mock data for FoodLens development.
+ * Mock data for Labelicious development.
  * Represents packaged food analyses, demo labels, and structured ingredient intelligence.
  */
 
@@ -425,7 +425,7 @@ export const HOW_IT_WORKS_STEPS = [
     step: '02',
     title: 'Understand',
     subtitle: 'AI translates the jargon',
-    description: 'FoodLens decodes chemical additive codes, hidden sugars, and marketing claims into plain English.',
+    description: 'Labelicious decodes chemical additive codes, hidden sugars, and marketing claims into plain English.',
     iconName: 'Sparkles',
     tag: 'Instant decoding'
   },

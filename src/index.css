@@ -1,9 +1,48 @@
 @import "tailwindcss";
 
 @layer base {
+  :root {
+    --fl-purple: #26113f;
+    --fl-purple-dark: #190b2b;
+    --fl-orange: #ff6b2c;
+    --fl-lime: #c8f31d;
+    --fl-cream: #fff8e9;
+    --fl-ink: #17131c;
+    --fl-muted: #756d7d;
+    --fl-border: #ded5c5;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
   body {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    color: #1e293b;
-    background-color: #f8faf9;
+    margin: 0;
+    font-family:
+      'Plus Jakarta Sans',
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      sans-serif;
+
+    color: var(--fl-ink);
+    background-color: var(--fl-cream);
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  ::selection {
+    background: var(--fl-lime);
+    color: var(--fl-purple-dark);
   }
 }

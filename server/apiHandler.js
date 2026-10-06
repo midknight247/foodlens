@@ -5,7 +5,7 @@ import { validateAndSanitizeAiResponse } from './validator.js';
  * Handles POST /api/analyze-label requests.
  *
  * The function name/imports remain compatible with the existing
- * FoodLens code, but the AI provider is now OpenRouter.
+ * Labelicious code, but the AI provider is now OpenRouter.
  */
 export async function handleAnalyzeLabelRequest(body, env = {}) {
   try {
@@ -77,7 +77,7 @@ export async function handleAnalyzeLabelRequest(body, env = {}) {
       }
     };
   } catch (err) {
-    console.error('[FoodLens] AI analysis failed:', err.message);
+    console.error('[Labelicious] AI analysis failed:', err.message);
 
     return {
       status: 500,
